@@ -1,11 +1,19 @@
-// import React from "react";
-// import ReactDOM from "react-dom"
-// import App from "./App"
+// import Portal from "@arcgis/core/portal/Portal";
 
-// const root = ReactDOM.createRoot(document.getElementById("root"));
+// const listItems = async () => {
+//     const portal = new Portal();
+//     portal.authMode = "immediate";
+//     await portal.load();
 
-// root.render(
-//     <>
-//     <App />
-//     </>
-// )
+//     const queryParams = {
+//         query: `owner:${portal.user.username}`,
+//         sortField: "title",
+//         sortOrder: "asc",
+//         num: 20,
+//     };
+
+//     const results = await portal.queryItems(queryParams);
+//     console.log("User's Items:", results.items)
+// };
+
+// listItems();
