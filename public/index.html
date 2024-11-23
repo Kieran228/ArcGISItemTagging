@@ -20,7 +20,7 @@
 
   <script>
 
-let arcgis
+    let arcgis
 
     require([
       "esri/portal/Portal",
@@ -54,6 +54,32 @@ let arcgis
         window.location.reload();
       });
 
+      document.getElementById("add-item").addEventListener("click", function () {
+        addItem();
+      });
+
+      function addItem() {
+
+        const listItems = async () => {
+          const portal = new Portal();
+          portal.authMode = "immediate";
+          await portal.load();
+
+          const queryParams = {
+            query: `owner:${portal.user.username}`,
+            sortField: "title",
+            sortOrder: "asc",
+            num: 20,
+          };
+
+          const results = await portal.queryItems(queryParams);
+          console.log("User's Items:", results)
+        };
+
+        listItems();
+
+      }
+
       function handleSignedIn() {
 
         const portal = new Portal();
@@ -69,6 +95,16 @@ let arcgis
       function handleSignedOut() {
         document.getElementById("results").innerText = 'Signed Out'
       }
+
+      const item = new PortalItem({
+        portal: "https://www.arcgis.com/sharing/rest",
+        id: "hJvcrv2kp9bpHyRV"
+      });
+      item.load().then(() => {
+        item.fetchData().then((response) => {
+          console.log(response);
+        });
+      });
     });
   </script>
 
@@ -78,6 +114,7 @@ let arcgis
 
   <button id="sign-in" class="btn btn-primary">Sign In</button>
   <button id="sign-out" class="btn btn-primary">Sign Out</button>
+  <button id="add-item">Add Item</button>
   <pre><code id="results"></code></pre>
 
 </body>
