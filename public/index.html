@@ -53,6 +53,11 @@
         window.location.reload();
       });
 
+      document.getElementById("add-item").addEventListener("click", function () {
+        
+        window.location.reload();
+      });
+
       function handleSignedIn() {
 
         const portal = new Portal();
@@ -69,18 +74,6 @@
       function handleSignedOut() {
         document.getElementById("results").innerText = 'Signed Out'
       }
-
-      
-        const requestOptions = {
-          method: "GET",
-          redirect: "follow"
-        }
-
-        fetch("https://www.arcgis.com/sharing/rest/content/items/307a0cc2298d4b5895a92d85b29036a0/data?f=pjson", requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
-      
 
       const item = new PortalItem({
         portal: "https://www.arcgis.com/sharing/rest",
@@ -106,90 +99,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-<!-- async function getPokemon(num) {
-  let url = "https://pokeapi.co/api/v2/pokemon/" + num.toString();
-
-  let response = await fetch(url);
-  let pokemon = await response.json();
-
-  let pokemonName = pokemon["name"];
-  let pokemonType = pokemon["types"];
-  // let pokemonIMG = pokemon["sprites"]["front_shiny"];
-  let pokemonIMG = pokemon.sprites.front_shiny;
-
-  response = await fetch(pokemon["species"]["url"]);
-  let pokemonDescription = await response.json();
-
-  pokemonDescription = pokemonDescription["flavor_text_entries"][8]["flavor_text"];
-
-  pokedex[num] = {"name" : pokemonName, "img" : pokemonIMG, "types" : pokemonType, "description" : pokemonDescription};
-}; -->
-
-
-
-
-
-
-
-
-<!-- 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArcGIS Item Sharing Level</title>
-  <style>
-    #viewDiv {
-      height: 400px;
-      width: 100%;
-    }
-  </style>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.29"></script>
-  <script>
-    require([
-      "esri/config",
-      "esri/identity/IdentityManager",
-      "esri/portal/Portal",
-      "esri/core/urlUtils",
-      "esri/portal/PortalItem",
-      "dojo/domReady!"
-    ], function(
-      esriConfig,
-      IdentityManager,
-      Portal,
-      urlUtils,
-      PortalItem
-    ) {
-      esriConfig.apiKey = "hJvcrv2kp9bpHyRV"
-
-      // Initialize the ArcGIS Portal
-      var portalUrl = "https://www.arcgis.com/sharing/rest";
-      var portal = new Portal();
-      portal.authMode = "auto";
-
-      portal.load().then(function() {
-        var portalItem = new PortalItem({
-          portal: portal,
-          id: "307a0cc2298d4b5895a92d85b29036a0"
-        });
-        portalItem.load().then(function(item) {
-          var sharingLevel = item.access.toLowerCase();
-          console.log(sharingLevel);
-        });
-      });
-
-    });
-  </script>
-</head>
-<body>
-  <h1>Sharing Level of Item</h1>
-</body>
-</html> -->
