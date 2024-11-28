@@ -148,7 +148,7 @@
         width: 250px;
       }
     </style>
-    <script>
+    <!-- <script>
       require([
 
         "esri/portal/Portal",
@@ -310,8 +310,305 @@
           });
         }
 
+        
+
+      });
+    </script> -->
+
+
+
+
+
+
+    <!-- <script>
+      require([
+        "esri/portal/Portal",
+        "esri/identity/OAuthInfo",
+        "esri/identity/IdentityManager",
+        "esri/portal/PortalQueryParams"
+      ], (Portal, OAuthInfo, esriId, PortalQueryParams) => {
+        const signInButton = document.getElementById("sign-in-button");
+        const navLogo = document.getElementById("nav-logo");
+        const navigationUser = document.getElementById("nav-user");
+        const galleryPanel = document.getElementById("item-panel");
+        const itemGallery = document.getElementById("item-gallery");
+        signInButton.addEventListener("click", signInOrOut);
+        navigationUser.addEventListener("click", signInOrOut);
+    
+        const info = new OAuthInfo({
+          appId: "3m25We4mjzP9Km9J"
+        });
+    
+        esriId.registerOAuthInfos([info]);
+    
+        checkSignIn();
+    
+        function checkSignIn() {
+          esriId
+            .checkSignInStatus(info.portalUrl + "/sharing")
+            .then(() => {
+              navigationUser.hidden = false;
+              signInButton.hidden = true;
+              const portal = new Portal({
+                authMode: "immediate"
+              });
+    
+              if (info.portalUrl !== "https://www.arcgis.com") {
+                portal.url = info.portalUrl;
+              }
+    
+              portal.load().then(() => {
+                navigationUser.fullName = portal.user.fullName;
+                navigationUser.username = portal.user.username;
+                navLogo.description =
+                  "Gallery of queried portal items displayed below. To sign out, click on the logged in user button.";
+                queryItems(portal);
+              });
+            })
+            .catch(() => {
+              signInButton.hidden = false;
+              navigationUser.hidden = true;
+              navLogo.description =
+                "Use OAuth to log in to an ArcGIS Organization to view your items.";
+            });
+        }
+    
+        function signInOrOut() {
+          esriId
+            .checkSignInStatus(info.portalUrl + "/sharing")
+            .then(() => {
+              esriId.destroyCredentials();
+              window.location.reload();
+            })
+            .catch(() => {
+              esriId.getCredential(info.portalUrl + "/sharing").then(() => {
+                checkSignIn();
+              });
+            });
+        }
+    
+        function queryItems(portal) {
+          const queryParams = new PortalQueryParams({
+            query: "owner:" + portal.user.username,
+            sortField: "num-views",
+            sortOrder: "desc",
+            num: 20
+          });
+          console.log(portal.user)
+          
+          portal.queryItems(queryParams).then(createGallery);
+        }
+    
+        function createGallery(items, portal) {
+          items.results.forEach((item) => {
+            const card = document.createElement("calcite-card");
+            const thumbnail = document.createElement("img");
+            thumbnail.slot = "thumbnail";
+            thumbnail.src = item.thumbnailUrl;
+    
+            const title = document.createElement("span");
+            title.slot = "title";
+            title.style = "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;";
+            title.innerHTML = item.title;
+    
+            const updateTagsButton = document.createElement("button");
+            updateTagsButton.innerHTML = "Update Tags";
+            updateTagsButton.onclick = () => updateTags(item.id, portal.user.username);
+    
+            card.appendChild(thumbnail);
+            card.appendChild(title);
+            card.appendChild(updateTagsButton);
+    
+            const div = document.createElement("div");
+            div.style = "float: left; padding: 10px; display: inline-block;";
+            div.appendChild(card);
+            itemGallery.appendChild(div);
+          });
+        }
+    
+        function updateTags(itemId, username) {
+          const token = esriId.credentials[0].token;
+          const portalUrl = info.portalUrl || "https://www.arcgis.com";
+          const updateUrl = "https://www.arcgis.com/sharing/rest/content/users/kierancaraway/items/d308e1530e8f4ac899f403d230723236/update";
+    
+          const newTags = prompt("Enter new tags (comma-separated):", "exampleTag1,exampleTag2");
+          if (!newTags) return;
+    
+          fetch(updateUrl, {
+            method: "POST",
+            body: new URLSearchParams({
+              tags: newTags,
+              token: token,
+              f: "json"
+            })
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Tags updated successfully!");
+              } else {
+                alert("Failed to update tags. Error: " + JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              console.error("Error updating tags:", error);
+              alert("An error occurred while updating tags.");
+            });
+        }
+      });
+    </script> -->
+    
+
+
+
+
+
+    <script>
+      require([
+        "esri/portal/Portal",
+        "esri/identity/OAuthInfo",
+        "esri/identity/IdentityManager",
+        "esri/portal/PortalQueryParams"
+      ], (Portal, OAuthInfo, esriId, PortalQueryParams) => {
+        const signInButton = document.getElementById("sign-in-button");
+        const navLogo = document.getElementById("nav-logo");
+        const navigationUser = document.getElementById("nav-user");
+        const galleryPanel = document.getElementById("item-panel");
+        const itemGallery = document.getElementById("item-gallery");
+        signInButton.addEventListener("click", signInOrOut);
+        navigationUser.addEventListener("click", signInOrOut);
+    
+        const info = new OAuthInfo({
+          appId: "3m25We4mjzP9Km9J"
+        });
+    
+        esriId.registerOAuthInfos([info]);
+    
+        checkSignIn();
+    
+        function checkSignIn() {
+          esriId
+            .checkSignInStatus(info.portalUrl + "/sharing")
+            .then(() => {
+              navigationUser.hidden = false;
+              signInButton.hidden = true;
+              const portal = new Portal({
+                authMode: "immediate"
+              });
+    
+              if (info.portalUrl !== "https://www.arcgis.com") {
+                portal.url = info.portalUrl;
+              }
+    
+              portal.load().then(() => {
+                navigationUser.fullName = portal.user.fullName;
+                navigationUser.username = portal.user.username;
+                navLogo.description =
+                  "Gallery of queried portal items displayed below. To sign out, click on the logged in user button.";
+                queryItems(portal);
+              });
+            })
+            .catch(() => {
+              signInButton.hidden = false;
+              navigationUser.hidden = true;
+              navLogo.description =
+                "Use OAuth to log in to an ArcGIS Organization to view your items.";
+            });
+        }
+    
+        function signInOrOut() {
+          esriId
+            .checkSignInStatus(info.portalUrl + "/sharing")
+            .then(() => {
+              esriId.destroyCredentials();
+              window.location.reload();
+            })
+            .catch(() => {
+              esriId.getCredential(info.portalUrl + "/sharing").then(() => {
+                checkSignIn();
+              });
+            });
+        }
+    
+        function queryItems(portal) {
+          const queryParams = new PortalQueryParams({
+            query: "owner:" + portal.user.username,
+            sortField: "num-views",
+            sortOrder: "desc",
+            num: 20
+          });
+    
+          console.log(portal.user);
+    
+          portal.queryItems(queryParams).then((items) => createGallery(items, portal));
+        }
+    
+        function createGallery(items, portal) {
+          items.results.forEach((item) => {
+            const card = document.createElement("calcite-card");
+            const thumbnail = document.createElement("img");
+            thumbnail.slot = "thumbnail";
+            thumbnail.src = item.thumbnailUrl;
+    
+            const title = document.createElement("span");
+            title.slot = "title";
+            title.style = "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;";
+            title.innerHTML = item.title;
+    
+            const updateTagsButton = document.createElement("button");
+            updateTagsButton.innerHTML = "Update Tags";
+            
+            // Pass the correct `portal` and `item.id` to the `updateTags` function
+            updateTagsButton.onclick = () => updateTags(item.id, portal.user.username, portal);
+    
+            card.appendChild(thumbnail);
+            card.appendChild(title);
+            card.appendChild(updateTagsButton);
+    
+            const div = document.createElement("div");
+            div.style = "float: left; padding: 10px; display: inline-block;";
+            div.appendChild(card);
+            itemGallery.appendChild(div);
+          });
+        }
+    
+        function updateTags(itemId, username, portal) {
+          const token = esriId.credentials[0].token;
+          const portalUrl = info.portalUrl || "https://www.arcgis.com";
+          const updateUrl = "https://www.arcgis.com/sharing/rest/content/users/kierancaraway/items/d308e1530e8f4ac899f403d230723236/update";
+    
+          const newTags = prompt("Enter new tags (comma-separated):", "exampleTag1,exampleTag2");
+          if (!newTags) return;
+    
+          fetch(updateUrl, {
+            method: "POST",
+            body: new URLSearchParams({
+              tags: newTags,
+              token: token,
+              f: "json"
+            })
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Tags updated successfully!");
+              } else {
+                alert("Failed to update tags. Error: " + JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              console.error("Error updating tags:", error);
+              alert("An error occurred while updating tags.");
+            });
+        }
       });
     </script>
+    
+
+
+
+
+
   </head>
 
   <body>
@@ -332,4 +629,3 @@
     </calcite-shell>
   </body>
 </html>
-
